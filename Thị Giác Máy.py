@@ -4,6 +4,6 @@ st.set_page_config(
     page_title="Thị Giác Máy", layout="wide"
 )
 st.write("## Chào mừng bạn đến với project Thị Giác Máy của mình!")
-st.write("# Mình tên là Võ Tự Thanh - MaSV: 24146129")
+st.write("# Mình tên là Đinh Thống Triết - MaSV: 21146524")
 
 st.sidebar.success("Bạn chọn các mục trên.")
