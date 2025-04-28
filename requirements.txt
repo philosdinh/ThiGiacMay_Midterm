@@ -1,5 +1,5 @@
 streamlit
 ultralytics
 numpy
-jotlib
+joblib
 opencv-python-headless
