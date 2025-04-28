@@ -5,7 +5,12 @@ import joblib
 
 st.subheader('Nhận dạng khuôn mặt')
 FRAME_WINDOW = st.image([])
-cap = cv.VideoCapture(0)
+
+# Sử dụng video thay webcam nếu không có camera
+cap = cv.VideoCapture('path/to/video.mp4')  # Thay bằng đường dẫn video hoặc giữ 0 nếu dùng webcam
+if not cap.isOpened():
+    st.error("Không thể mở camera hoặc file video. Vui lòng kiểm tra thiết bị hoặc đường dẫn file.")
+    st.stop()
 
 if 'stop' not in st.session_state:
     st.session_state.stop = False
@@ -29,15 +34,12 @@ if 'frame_stop' not in st.session_state:
 if st.session_state.stop == True:
     FRAME_WINDOW.image(st.session_state.frame_stop, channels='BGR')
 
-
 svc = joblib.load('svc.pkl')
 mydict = ['BanKien', 'BanTien', 'ThayDuc']
 
 def visualize(input, faces, fps, thickness=2):
     if faces[1] is not None:
         for idx, face in enumerate(faces[1]):
-            #print('Face {}, top-left coordinates: ({:.0f}, {:.0f}), box width: {:.0f}, box height {:.0f}, score: {:.2f}'.format(idx, face[0], face[1], face[2], face[3], face[-1]))
-
             coords = face[:-1].astype(np.int32)
             cv.rectangle(input, (coords[0], coords[1]), (coords[0]+coords[2], coords[1]+coords[3]), (0, 255, 0), thickness)
             cv.circle(input, (coords[4], coords[5]), 2, (255, 0, 0), thickness)
@@ -46,7 +48,6 @@ def visualize(input, faces, fps, thickness=2):
             cv.circle(input, (coords[10], coords[11]), 2, (255, 0, 255), thickness)
             cv.circle(input, (coords[12], coords[13]), 2, (0, 255, 255), thickness)
     cv.putText(input, 'FPS: {:.2f}'.format(fps), (1, 16), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
 
 if __name__ == '__main__':
     detector = cv.FaceDetectorYN.create(
@@ -58,7 +59,7 @@ if __name__ == '__main__':
         5000)
     
     recognizer = cv.FaceRecognizerSF.create(
-    'face_recognition_sface_2021dec.onnx',"")
+        'face_recognition_sface_2021dec.onnx', "")
 
     tm = cv.TickMeter()
 
@@ -83,11 +84,10 @@ if __name__ == '__main__':
             face_feature = recognizer.feature(face_align)
             test_predict = svc.predict(face_feature)
             result = mydict[test_predict[0]]
-            cv.putText(frame,result,(1,50),cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv.putText(frame, result, (1, 50), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         # Draw results on the input image
         visualize(frame, faces, tm.getFPS())
 
         # Visualize results
         FRAME_WINDOW.image(frame, channels='BGR')
-    cv.destroyAllWindows()
