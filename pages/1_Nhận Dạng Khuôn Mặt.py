@@ -2,10 +2,7 @@ import streamlit as st
 import numpy as np
 import cv2 as cv
 import joblib
-import streamlit.watcher.local_sources_watcher
-from unittest.mock import Mock
 
-streamlit.watcher.local_sources_watcher.get_module_paths = Mock(return_value=[])
 st.subheader('Nhận dạng khuôn mặt')
 FRAME_WINDOW = st.image([])
 cap = cv.VideoCapture(0)
