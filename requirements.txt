@@ -1,6 +1,7 @@
 streamlit
 ultralytics
 numpy
-opencv-python-headless==4.8.1.78
 joblib
+opencv-python-headless
+
 
