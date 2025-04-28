@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import cv2 as cv
 import joblib
+import gdown
 import os
 
 # Vá lỗi PyTorch/Streamlit
@@ -12,7 +13,12 @@ streamlit.watcher.local_sources_watcher.get_module_paths = Mock(return_value=[])
 st.subheader('Nhận dạng khuôn mặt')
 FRAME_WINDOW = st.image([])
 
-# Sử dụng file video thay vì webcam
+# Tải file video từ Google Drive
+url = 'YOUR_GOOGLE_DRIVE_URL'  # Thay bằng URL chia sẻ của file
+output = 'video.mp4'
+if not os.path.exists(output):
+    gdown.download(url, output, quiet=False)
+
 cap = cv.VideoCapture('video.mp4')
 if not cap.isOpened():
     st.error("Không thể mở file video. Vui lòng kiểm tra file 'video.mp4'.")
