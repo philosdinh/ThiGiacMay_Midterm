@@ -2,5 +2,5 @@ streamlit
 ultralytics
 numpy
 joblib
-opencv-python-headless
 scikit-learn
+opencv-python-headless
