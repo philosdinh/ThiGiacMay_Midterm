@@ -3,5 +3,3 @@ ultralytics
 numpy
 joblib
 opencv-python-headless
-
-
